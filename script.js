@@ -1,4 +1,4 @@
-console.clear();
+// console.clear();
 let deltaX, deltaY, deg, distance;
 let newPosX = 0,
   newPosY = 0,
@@ -6,6 +6,27 @@ let newPosX = 0,
   startPosY = 0;
 const lightSource = document.getElementById("light-source");
 const solids = document.querySelectorAll(".solid");
+let solidsData = getSolidsData(); // global
+let lum = 75; // lum is luminous intensity
+
+function fpsMeter() {
+  let prevTime = Date.now(),
+    frames = 0;
+
+  requestAnimationFrame(function loop() {
+    const time = Date.now();
+    frames++;
+    if (time > prevTime + 1000) {
+      let fps = Math.round((frames * 1000) / (time - prevTime));
+      prevTime = time;
+      frames = 0;
+
+      console.info("FPS: ", fps);
+    }
+
+    requestAnimationFrame(loop);
+  });
+}
 
 const getRelativeVector = (angle, length) => {
   angle = (angle * Math.PI) / 180;
@@ -16,21 +37,29 @@ const getRelativeVector = (angle, length) => {
 };
 
 const setBoxShadow = (solid, vec, distance, e, isInset) => {
-  const blur = distance;
-  const levels = 4;
-  const cd = 10; // cd is luminous intensity (smaller is more)
-  const color = "hsla(220deg, 60%, 50%, .25)";
-  const x = -vec.x;
-  const y = -vec.y;  
+  const b = distance; // blur
+  const l = 8; // number of shadow layers
+  const c = "hsla(220deg, 60%, 50%, .25)"; // shadow color
+  const x = -vec.x; // x offset
+  const y = -vec.y; // y offset
+  let sf = 1000; // scaleFactor
   let str = "";
-  for (let i = 1; i <= levels; i++) {
-    const delimiter = i < levels ? "," : "";
+  for (let i = 1; i <= l; i++) {
+    const delimiter = i < l ? "," : "";
     const location = isInset ? "inset" : "";
     str += `${location}
-            ${Math.round(x / (i * cd) * e)}px 
-            ${Math.round(y / (i * cd) * e)}px 
-            ${Math.round(blur / (i * cd) * e)}px 
-            ${color} ${delimiter}`;
+            ${Math.round(((x / i) * e * lum) / sf)}px 
+            ${Math.round(((y / i) * e * lum) / sf)}px 
+            ${Math.round(((b / i) * e * lum) / sf)}px 
+            ${c} ${delimiter}`;
+  }
+  if (isInset) {
+    str += `,
+          ${Math.round(((x / l) * e * lum) / sf)}px 
+          ${Math.round(((y / l) * e * lum) / sf)}px 
+          ${Math.round(((b / l) * e * lum) / sf)}px 
+          rgba(255,255,255,.95)
+    `;
   }
   solid.style.boxShadow = str;
 };
@@ -47,7 +76,7 @@ const updateAllShadows = () => {
     let distance = getDistanceToPageObject(dX, dY);
     let vec = getRelativeVector(angle, distance, 0, 0);
     let elevation = solidsData[i].elevation;
-    let isInset = solidsData[i].isInset
+    let isInset = solidsData[i].isInset;
     setBoxShadow(solids[i], vec, distance, elevation, isInset);
   }
 };
@@ -60,7 +89,7 @@ const getDistanceToPageObject = (dX, dY) => {
   return (distance = Math.sqrt(Math.pow(dX, 2) + Math.pow(dY, 2)));
 };
 
-const mouseMove = (e) => {
+const pointerMove = (e) => {
   // calculate the new position
   newPosX = startPosX - e.clientX;
   newPosY = startPosY - e.clientY;
@@ -88,21 +117,40 @@ function getSolidsData() {
   return solidsData;
 }
 
-lightSource.addEventListener("mousedown", function (e) {
+lightSource.addEventListener("pointerdown", function (e) {
   e.preventDefault();
   // get the starting position of the cursor
   startPosX = e.clientX;
   startPosY = e.clientY;
-  document.addEventListener("mousemove", mouseMove);
-  document.addEventListener("mouseup", function () {
-    document.removeEventListener("mousemove", mouseMove);
+  document.addEventListener("pointermove", pointerMove);
+  document.addEventListener("pointerup", function () {
+    document.removeEventListener("pointermove", pointerMove);
   });
 });
 
-let solidsData = getSolidsData(); // global
 window.addEventListener("resize", () => {
   solidsData = getSolidsData();
   updateAllShadows();
   (newPosX = 0), (newPosY = 0), (startPosX = 0), (startPosY = 0);
 });
+
+const updateUI = () => {
+  const adjLum = lum / 25;
+  lightSource.innerHTML = adjLum;
+};
+
+document.addEventListener("keydown", (e) => {
+  if (e.key === "ArrowUp") {
+    e.preventDefault();
+    lum = lum < 250 ? (lum += 25) : 275;
+  } else if (e.key === "ArrowDown") {
+    e.preventDefault();
+    lum = lum > 25 ? (lum -= 25) : 0;
+  }
+  updateAllShadows();
+  updateUI();
+});
+
 updateAllShadows();
+updateUI();
+// fpsMeter();

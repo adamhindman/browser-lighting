@@ -10,43 +10,36 @@
 </head>
 
 <body>
-  <div id="light-source" draggable=true>☀️</div>
   <div id="layout">
+    <div id="light-source"></div>
+    <div class="block solid">
+      <h2>Shadow casting experiment</h2>
+      <p>The box shadows on this page act like they have a real light source.</p>
+    </div>
+    <div class="block solid">
+      <h2>What do I do?</h2>
+      <p> Experiment by dragging the ☀️ around, and press up/down to adjust the intensity of the light. Sorry
+        mobile users!</p>
+    </div>
     <div class="block solid" data-elevation="5">
-      <h2>Lorem ipsum dolor sit amet.</h2>
-      <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Vel, consectetur.</p>
+      <h2>This element has an elevation of 5</h2>
+      <p>What does 5 mean? It means it's 5 times higher up than 1.</p>
+    </div>
+    <div class="block solid" data-elevation=".25">
+      <h2>This element has an elevation of .25</h2>
+      <p>That means the shadow is really tiny.</p>
     </div>
     <div class="block solid">
-      <h2>Lorem ipsum dolor sit.</h2>
-      <p>Omnis ipsa voluptate nam error unde eaque beatae officiis fugit.</p>
+      <h2>This box has the default elevation</h2>
+      <p>Which happens to be "1" on the arbitrary scale I made up.</p>
     </div>
-    <div class="block solid">
-      <h2>Quibusdam distinctio ducimus repellendus veniam.</h2>
-      <p>Nesciunt ab sed beatae accusamus. Debitis expedita illo delectus veniam!</p>
+    <div class="block">
+      <h2>This element has no shadow</h2>
+      <p>Only elements with the "solid" class are affected by this lighting.</p>
     </div>
-    <div class="block solid">
-      <h2>Fugiat tempore repellendus fugit debitis?</h2>
-      <p>Harum sunt sequi iusto quam cumque earum, illum eos dicta.</p>
-    </div>
-    <div class="block solid inset" data-elevation=".5">
-      <h2>Eum expedita esse vero magnam?</h2>
-      <p>Eos nesciunt officiis aspernatur delectus vitae deleniti dolores cum accusantium?</p>
-    </div>
-    <div class="block solid">
-      <h2>Soluta omnis debitis veritatis ex.</h2>
-      <p>Eaque alias officia omnis nesciunt libero explicabo ipsum! Facere, cum.</p>
-    </div>
-    <div class="block solid">
-      <h2>Corporis mollitia ullam laboriosam odit?</h2>
-      <p>Fugit, maiores fugiat amet recusandae debitis ullam totam commodi tempora.</p>
-    </div>
-    <div class="block solid">
-      <h2>Repellat culpa nostrum quia alias.</h2>
-      <p>Quisquam et repellat possimus quaerat consequatur reprehenderit ad deleniti in.</p>
-    </div>
-    <div class="block solid">
-      <h2>Provident atque ex aliquam totam!</h2>
-      <p>Accusantium architecto minus eum illum sit, animi non voluptas quibusdam.</p>
+    <div class="long block solid inset" data-elevation=".33">
+      <p>This element has an inset shadow with its own elevation. It's supposed to look like it's 'beneath' the page.
+      </p>
     </div>
   </div>
   <script src="./script.js"></script>
