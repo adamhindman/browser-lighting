@@ -1,5 +1,5 @@
 # browser-lighting
-Proof of concept where I'm endering box shadows for HTML elements based on a light source
+Proof of concept where I'm rendering box shadows for HTML elements based on a light source. Render may be too fancy of a word for this.
 
 ## Ok
 
