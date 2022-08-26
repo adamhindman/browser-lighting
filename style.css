@@ -65,6 +65,10 @@ body {
   touch-action: none;
   z-index: 0;
   color: #311704;
+  animation: .8s alternate infinite ease-in-out throb;
+}
+#light-source:hover{
+  animation: none;
 }
 #light-source:before {
   content: '☀️';
@@ -91,5 +95,16 @@ footer {
     top: 10px;
     right: 10px;
     width: auto;
+  }
+}
+
+
+@keyframes throb {
+  from {
+    transform: scale(.9);
+  }
+
+  to {
+    transform: scale(1.25);
   }
 }
